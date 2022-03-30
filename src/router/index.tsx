@@ -6,7 +6,6 @@ import { RouteObject, useRoutes, useLocation, Navigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 import { message } from "antd";
 import { Dispatch } from "@/store";
-
 // 组件
 // ==================
 import Login from '../pages/Login'
@@ -30,15 +29,15 @@ message.config({
 
 function RouterCom(props: any): JSX.Element {
   const dispatch = useDispatch<Dispatch>();
-
   useEffect(() => {
-    const userTemp = localStorage.getItem("userInfo");
+    const userTemp:string | undefined = localStorage.getItem("userInfo")?.toString();
     /**
      * sessionStorage中有user信息，但store中没有
      * 说明刷新了页面，需要重新同步user数据到store
      * **/
     if (userTemp) {
-      dispatch.userInfo.setUserInfo(JSON.parse(userTemp));
+      const userInfo = JSON.parse(userTemp)
+      dispatch.userInfo.setUserInfo(userInfo);
     }
   }, [dispatch.userInfo]);
   function RequireAuth({ children }: { children: JSX.Element }) {
@@ -51,30 +50,30 @@ function RouterCom(props: any): JSX.Element {
       // than dropping them off on the home page.
       return <Navigate to="/login" state={{ from: location }} replace />;
     }
-    const userInfo = JSON.parse(auth)
+    // const userInfo = JSON.parse(auth)
     // if (!userInfo.menus.includes()){
     //   return <Navigate to="/404" state={{ from: location }} replace />;
     // }
     return children;
   }
   let routes: RouteObject[] = [
-    // RequireAuth UserLayout
     {
       path: "/",
       element: (
-        <RequireAuth>
-           <UserLayout />
-        </RequireAuth>
+        <UserLayout />
       ),
       children: [
         { index: true, element: <Index /> },
         {
           path: "/admin/articleHeaderList",
-          element: <ArticleHeaderList />,
+          element: 
+          <RequireAuth>
+            <ArticleHeaderList/>
+          </RequireAuth>
         },
         {
           path: "/admin/articleList",
-          element: <ArticleList />,
+          element:  <RequireAuth><ArticleList /></RequireAuth>,
         },
         {
           path: "/admin/articleTypeList",

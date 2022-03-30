@@ -6,36 +6,40 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useMount } from "react-use";
+import { useDispatch } from "react-redux";
 import { Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import BreadTab from '../components/BreadTab'
 import MenuCom from '../components/Menu'
 import HeaderCom from '../components/Header'
-import { useSelector, useDispatch } from "react-redux";
-import { RootState, Dispatch } from "@/store";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 import servicePath from '@/utils/apis/apiUrl'
 import axios from '@/utils/axios'
 import './index.sass'
+import { UserInfo } from "@/models/index.type";
+import { Dispatch } from "@/store";
 
 const { Content } = Layout;
-
 // ==================
 // 本组件
 // ==================
 export default function AppContainer(): JSX.Element {
-  const userInfo = useSelector((state: RootState) => state.userInfo.userinfo);
+  const userInfo:UserInfo = useSelector((state: RootState) => state.userInfo.userinfo);
   const navigate = useNavigate()
-  // menusData
-  const [data, setData] = useState([]); // 菜单栏是否收起
-  const [menusData, setMenusData] = useState([]); // 菜单栏是否收起
-  const [collapsed, setCollapsed] = useState(false); // 菜单栏是否收起
-  // 退出登录
-  // 生命周期 - 首次加载组件时触发
+  const [data, setData] = useState([]);
+  const [menusData, setMenusData] = useState([]);
+  const [collapsed, setCollapsed] = useState(false);
+  const [menusTitleHash, setMenusTitleHash] = useState({});
   
   const getMeuns = async() => {
-    
     const hashObj: any = {}
-    userInfo.menus.forEach((item: any) => {
+    const menus = userInfo.menus || []
+    console.log(typeof userInfo)
+    console.log(userInfo.menus)
+
+    
+    menus.forEach((item: string) => {
       hashObj[item] = true
     })
     const tempArr: any = []
@@ -49,9 +53,29 @@ export default function AppContainer(): JSX.Element {
     }
     setMenusData(tempArr)
   }
+  interface resobj {
+    data: []
+  }
+  interface resobj1 {
+    url: string,
+    title?: string,
+  }
+  interface test {
+    [key: string]: string | undefined
+  }
   useMount(async() => {
-    const res: any = await axios.get(servicePath.getMenus);
+    const res: resobj = await axios.get(servicePath.getMenus);
     setData(res.data)
+    console.log('res', res)
+    const MenusTitleHash:test = {}
+    res.data && res.data.forEach((item:resobj1)=> {
+      
+      if (!MenusTitleHash[item.url]) {
+        MenusTitleHash[item.url] = item.title
+      }
+    })
+    setMenusTitleHash(MenusTitleHash)
+
   })
   useEffect(() => {
     getMeuns()
@@ -64,19 +88,20 @@ export default function AppContainer(): JSX.Element {
   return (
     <Layout className="layout-container" hasSider>
       <MenuCom
+        userinfo={userInfo}
         data={menusData}
+        menusTitleHash={menusTitleHash}
         collapsed={collapsed}
       />
       <Layout>
         <HeaderCom
-          data={menusData}
+          userinfo={userInfo}
           collapsed={collapsed}
           onToggle={() => setCollapsed(!collapsed)}
           onLogout={onLogout}
         />
         <BreadTab
           menus={menusData}
-        // history={props.history}
         />
         <Content className="content-container">
           <Outlet />

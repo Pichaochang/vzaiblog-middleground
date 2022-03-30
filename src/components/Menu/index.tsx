@@ -4,7 +4,7 @@
 // ==================
 // 第三方库
 // ==================
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useMount } from "react-use";
 import { Layout, Menu as MenuAntd } from "antd";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -14,16 +14,11 @@ import { cloneDeep } from "lodash";
 // 自定义的东西
 // ==================
 import "./index.sass";
-// import ImgLogo from "@/assets/logo.png";
-// import Icon from "@/components/Icon";
 
 // ==================
 // 类型声明
 // ==================
-// import { History } from "history";
 import { Menu } from "@/models/index.type";
-import servicePath from '@/utils/apis/apiUrl'
-import axios from '@/utils/axios'
 
 const { Sider } = Layout;
 const { SubMenu, Item } = MenuAntd;
@@ -44,11 +39,12 @@ export default function MenuCom(props: any): JSX.Element {
   const [data, setData] = useState<Menu[]>([]); // 所有的菜单数据（未分层级）
   const [chosedKey, setChosedKey] = useState<string[]>([]); // 当前选中
   const [openKeys, setOpenKeys] = useState<string[]>([]); // 当前需要被展开的项
-
   // 生命周期 - 首次加载组件时触发
   useMount(async() => {
     // const res: any = await axios.get(servicePath.getMenus);
     setData(props.data);
+    console.log('props.data', props.data)
+    // setMenusTitleHash(props.menusTitleHash)
   });
   // 当页面路由跳转时，即location发生改变，则更新选中项
   useEffect(() => {
@@ -62,15 +58,11 @@ export default function MenuCom(props: any): JSX.Element {
   // ==================
   // 私有方法
   // ==================
-
   // 菜单被选择
-  const onSelect = useCallback(
-    (e) => {
-      // { title: e.title}
-      navigate(e.key);
-    },
-    [navigate]
-  );
+  const onSelect = (e:any) => {
+    const title:any = props.menusTitleHash && props.menusTitleHash[e.key]
+    navigate(e.key, { state: { title } });
+  }
 
   // 工具 - 递归将扁平数据转换为层级数据
   const dataToJson = useCallback((one, data): Menu[] => {

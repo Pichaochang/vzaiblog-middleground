@@ -3,7 +3,7 @@
 // ==================
 // 第三方库
 // ==================
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Layout, Tooltip, Menu, Dropdown } from "antd";
 import {
@@ -16,30 +16,18 @@ import {
   SmileOutlined,
 } from "@ant-design/icons";
 import './index.sass'
-const { Header } = Layout;
 
 // ==================
 // 类型声明
 // ==================
-// import { UserInfo } from "@/models/index.type";
+import { Element, Props } from "./index.type";
+const { Header } = Layout;
 
-interface Element {
-  webkitRequestFullscreen?: () => void;
-  webkitExitFullscreen?: () => void;
-  mozRequestFullScreen?: () => void;
-  mozCancelFullScreen?: () => void;
-  msRequestFullscreen?: () => void;
-  msExitFullscreen?: () => void;
-}
 
-// interface Props {
-//   collapsed: boolean; // 菜单的状态
-//   userinfo: UserInfo; // 用户信息
-//   onToggle: () => void; // 菜单收起与展开状态切换
-//   onLogout: () => void; // 退出登录
-// }
 
-export default function HeaderCom(props: any): JSX.Element {
+
+
+export default function HeaderCom(props: Props): JSX.Element {
   const [fullScreen, setFullScreen] = useState(false); // 当前是否是全屏状态
   // 进入全屏
   const requestFullScreen = useCallback(() => {

@@ -411,7 +411,7 @@ function UserAdminContainer(): JSX.Element {
       width: 200,
       render: (v: null, record: TableRecordData) => {
         const controls = [];
-        const u = userinfo.userBasicInfo || { id: -1 };
+        const u = userinfo || { id: -1 };
         p.includes("user:query") &&
           controls.push(
             <span
@@ -450,7 +450,6 @@ function UserAdminContainer(): JSX.Element {
           );
 
         p.includes("user:delete") &&
-          u.id !== record.id &&
           controls.push(
             <Popconfirm
               key="3"

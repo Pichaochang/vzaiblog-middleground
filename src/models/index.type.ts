@@ -58,16 +58,16 @@ export interface Power extends PowerParam {
 
 // 用户数据类型
 export interface UserInfo {
-  userBasicInfo: UserBasicInfo | null; // 用户的基本信息
-  menus: string[]; // 拥有的所有菜单对象
-  roles: string[]; // 拥有的所有角色对象
-  powers: string[]; // 拥有的所有权限对象
-  msg?: string,
-  phone?: string,
-  token: string,
-  userId: string,
-  userName: string,
-  code: number
+  code?: number | null | undefined
+  conditions: string
+  menus: string[]
+  msg?: string
+  phone?: string
+  powers: string[]
+  roles: string
+  token: string
+  userId: string
+  userName: string
 }
 
 // 用户的基本信息
@@ -100,7 +100,7 @@ export interface PowerTree extends Menu {
 // ./app.js的state类型
 export interface AppState {
   userinfo: UserInfo;
-  powersCode: string[];
+  // powersCode: string[];
 }
 
 // ./sys.js的state类型

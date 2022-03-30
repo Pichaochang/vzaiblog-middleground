@@ -6,11 +6,10 @@
 import { useState, useEffect, } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Dispatch } from "@/store";
 import Encrypt from './crypto'
 import servicePath from '@/utils/apis/apiUrl'
-import { RootState, Dispatch } from "@/store";
 import axios from '@/utils/axios'
-
 // ==================
 // 所需的所有组件
 // ==================
@@ -19,25 +18,14 @@ import CanvasBack from '@/components/CanvasBack'
 // ==================
 // CSS
 // ==================
-import css from './login.module.sass'
+import css from './index.module.sass'
 
 // ==================
 // 类型声明
 // ==================
 
-interface loginRes {
-  userBasicInfo: null,
-  menus: string[]; // 拥有的所有菜单对象
-  roles: string[]; // 拥有的所有角色对象
-  powers: string[]; // 拥有的所有权限对象
-  msg?: string,
-  phone?: string,
-  token: string,
-  userId: string,
-  userName: string,
-  code: number
-}
-function Login(props:any):JSX.Element {
+import { LoginRes } from './index.type'
+function Login():JSX.Element {
   const dispatch = useDispatch<Dispatch>();
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
@@ -59,7 +47,7 @@ function Login(props:any):JSX.Element {
       password: Encrypt.Encrypt(password),
     }
     setIsLoading(true)
-    const res:loginRes = await axios.post(servicePath.checkLogin, dataProps)
+    const res:LoginRes = await axios.post(servicePath.checkLogin, dataProps)
       setIsLoading(false)
       if (res.code === 200) {
         localStorage.setItem('tag_id', res.token)
