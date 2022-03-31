@@ -1,12 +1,11 @@
 /**
  * 基础model
- * 在src/store/index.js 中被挂载到store上，命名为 app
+ * 在src/store/index.js 中被挂载到store上
  * **/
 
 import { Dispatch } from "@/store";
 import {
   UserInfo,
-  AppState,
 } from "./index.type";
 
 const defaultState = {

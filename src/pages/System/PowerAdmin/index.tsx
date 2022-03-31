@@ -20,7 +20,6 @@ import {
   InputNumber,
   message,
   Divider,
-  Checkbox,
 } from "antd";
 import {
   EyeOutlined,
@@ -43,7 +42,6 @@ import {
   Res,
 } from "./index.type";
 import { RootState, Dispatch } from "@/store";
-import { CheckboxValueType } from "antd/lib/checkbox/Group";
 import { EventDataNode, DataNode } from "rc-tree/lib/interface";
 import servicePath from '@/utils/apis/apiUrl'
 import axios from '@/utils/axios'
@@ -92,7 +90,7 @@ function PowerAdminContainer() {
     "menu:query",
     "menu:del",
   ]
-  const roles = useSelector((state: RootState) => state.system.roles);
+  // const roles = useSelector((state: RootState) => state.system.roles);
   const menus = useSelector((state: RootState) => state.system.menus);
   const userinfo = useSelector((state: RootState) => state.userInfo.userinfo);
   const [form] = Form.useForm();
@@ -107,7 +105,7 @@ function PowerAdminContainer() {
     modalShow: false,
     modalLoading: false,
   });
-  const [rolesCheckboxChose, setRolesCheckboxChose] = useState<string[]>([]); // 表单 - 赋予项选中的值
+  // const [rolesCheckboxChose, setRolesCheckboxChose] = useState<string[]>([]); // 表单 - 赋予项选中的值
 
   // 左侧菜单树相关参数 当前Menu树被选中的节点数据
   const [treeSelect, setTreeSelect] = useState<{ title?: string; id?: string }>(
@@ -243,11 +241,9 @@ function PowerAdminContainer() {
     });
     if (modal.operateType === "add") {
       // 新增
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const res: Res = await axios.post(servicePath.addPower, params);
       message.success("添加成功");
-      // await setPowersByRoleIds(res && res.data.id, rolesCheckboxChose);
-      // dispatch.app.updateUserInfo();
-      // dispatch.system.getAllRoles();
     } else {
       // 修改
       if (!modal?.nowData?.id) {
@@ -278,31 +274,6 @@ function PowerAdminContainer() {
       message.success("删除成功")
     }
   };
-
-  /**
-   * 批量更新roles
-   * @param id 当前这个权限的id
-   * @param roleIds 选中的角色的id们，要把当前权限赋给这些角色
-   *  **/
-  const setPowersByRoleIds = (id: string, roleIds: string[]) => {
-    const params: any = roles.map((item: any) => {
-      const powersTemp = new Set(
-        item.menuAndPowers.reduce((a: any, b: any) => [...a, ...b.powers], [])
-      );
-      if (roleIds.includes(item.id)) {
-        powersTemp.add(id);
-      } else {
-        powersTemp.delete(id);
-      }
-      return {
-        id: item.id,
-        menus: item.menuAndPowers.map((item: any) => item.menuId),
-        powers: Array.from(powersTemp),
-      };
-    });
-    dispatch.system.setPowersByRoleIds(params);
-  };
-
   // ==================
   // 属性 和 memo
   // ==================
@@ -454,7 +425,6 @@ function PowerAdminContainer() {
           >
             {`添加${treeSelect.title || ""}权限`} 
           </Button>
-          {JSON.stringify(modal.modalShow)}
         </div>
         <Table
           className="diy-table"

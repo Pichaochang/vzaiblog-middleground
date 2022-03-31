@@ -6,7 +6,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useMount } from "react-use";
-import { useDispatch } from "react-redux";
 import { Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import BreadTab from '../components/BreadTab'
@@ -18,7 +17,6 @@ import servicePath from '@/utils/apis/apiUrl'
 import axios from '@/utils/axios'
 import './index.sass'
 import { UserInfo } from "@/models/index.type";
-import { Dispatch } from "@/store";
 
 const { Content } = Layout;
 // ==================
@@ -66,7 +64,6 @@ export default function AppContainer(): JSX.Element {
   useMount(async() => {
     const res: resobj = await axios.get(servicePath.getMenus);
     setData(res.data)
-    console.log('res', res)
     const MenusTitleHash:test = {}
     res.data && res.data.forEach((item:resobj1)=> {
       

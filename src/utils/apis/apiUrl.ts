@@ -1,4 +1,4 @@
-import { sysConfig } from "../../config/config"
+import { sysConfig } from "@/config/config"
 let servicePath = {
   checkLogin: sysConfig.baseUrl + '/admin/checkLogin',  //  检查用户名密码是否正确
   getTypeInfo: sysConfig.baseUrl + '/admin/getTypeInfo',  //  获得文章类别信息

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import { marked } from 'marked'
 import servicePath from '@/utils/apis/apiUrl'
@@ -38,7 +38,7 @@ function AddArticle(props:any) {
   const [introducemd, setIntroducemd] = useState() //简介的markdown内容
   const [introducehtml, setIntroducehtml] = useState('等待编辑') //简介的html内容
   const [showDate, setShowDate] = useState('') //发布日期
-  const [updateDate, setUpdateDate] = useState() //修改日志的日期
+  // const [updateDate, setUpdateDate] = useState() //修改日志的日期
   const [typeInfo, setTypeInfo] = useState([]) // 文章类别信息
   const [selectedType, setSelectType] = useState('') //选择的文章类别
   const [addressSrc, setAddressSrc] = useState('') //选择的文章类别
@@ -84,7 +84,7 @@ function AddArticle(props:any) {
   //从中台得到文章类别信息
   const getTypeInfo = () => {
     axios.get(servicePath.getTypeInfo).then((res) => {
-      if (res.data == '没有登录') {
+      if (res.data === '没有登录') {
         localStorage.removeItem('openId')
         navigate('/')
       } else {
@@ -152,7 +152,6 @@ function AddArticle(props:any) {
   }
   const getArticleById = (id:string) => {
     axios(servicePath.getArticleById + id).then((res) => {
-      //let articleInfo= res.data[0]
       setArticleTitle(res.data[0].title)
       setArticleContent(res.data[0].article_content)
       let html = marked(res.data[0].article_content)
@@ -172,6 +171,7 @@ function AddArticle(props:any) {
       setArticleId(tmpId)
       getArticleById(tmpId)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   let dom = (<div >
     {addressSrc}

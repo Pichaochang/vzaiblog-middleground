@@ -5,7 +5,6 @@
 // ==================
 import React, { useState, useMemo } from "react";
 import { useSetState, useMount } from "react-use";
-import { useSelector, useDispatch } from "react-redux";
 import {
   Form,
   Button,
@@ -50,7 +49,6 @@ import {
   UserBasicInfoParam,
   Res,
 } from "./index.type";
-import { RootState, Dispatch } from "@/store";
 
 // ==================
 // CSS
@@ -77,11 +75,7 @@ const formItemLayout = {
 // 本组件
 // ==================
 function UserAdminContainer(): JSX.Element {
-  const dispatch = useDispatch<Dispatch>();
-  const powerTreeData = useSelector(
-    (state: RootState) => state.system.powerTreeData
-  );
-  const userinfo = useSelector((state: RootState) => state.userInfo.userinfo);
+  // const userinfo = useSelector((state: RootState) => state.userInfo.userinfo);
   // const p = useSelector((state: RootState) => state.userInfo.powersCode);
   const p = [
     "user:add",
@@ -411,7 +405,7 @@ function UserAdminContainer(): JSX.Element {
       width: 200,
       render: (v: null, record: TableRecordData) => {
         const controls = [];
-        const u = userinfo || { id: -1 };
+        // const u = userinfo || { id: -1 };
         p.includes("user:query") &&
           controls.push(
             <span
@@ -495,6 +489,7 @@ function UserAdminContainer(): JSX.Element {
         roles: item.roles,
       };
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, data]);
 
   return (
